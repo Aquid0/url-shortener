@@ -14,6 +14,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1', urlRoutes);
 
+// Test
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
