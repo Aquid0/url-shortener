@@ -52,7 +52,7 @@ const redirectUrl = async (req, res, next) => {
         if (record) {
             return res.redirect(record.originalUrl);
         } else {
-            return next({ status: 404, message: 'Short URL not found' });
+            return res.redirect(`${process.env.FRONTEND_URL}/not-found`);
         }
     } catch (error) {
         next(error);
