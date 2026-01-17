@@ -1,5 +1,5 @@
 const urlService = require('../services/urlService');
-const { connectDB, client } = require('./db');
+const { connectDB } = require('./db');
 
 const shortenUrl = async (req, res, next) => {
     // What if same URL has been shortened already?
@@ -40,7 +40,19 @@ const shortenUrl = async (req, res, next) => {
 }
 
 const redirectUrl = async (req, res, next) => {
-    // Implementation for redirecting to the original URL
+    const db = await connectDB();
+    const { code } = req.params;
+
+    try {
+        const record = await db.collection('urls').findOne({ shortUrl: code });
+        if (record) {
+            return res.redirect(record.originalUrl);
+        } else {
+            return next({ status: 404, message: 'Short URL not found' });
+        }
+    } catch (error) {
+        next(error);
+    }
 }
 
 module.exports = {
