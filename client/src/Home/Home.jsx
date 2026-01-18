@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import axios from 'axios'
 
+const getBaseUrl = () => {
+  return import.meta.env.VITE_API_URL || window.location.origin;
+};
+
 export const Home = () => {
   const [url, setUrl] = useState('');
   const [shortUrl, setShortUrl] = useState('');
@@ -9,13 +13,14 @@ export const Home = () => {
     e.preventDefault();
     axios.post('/api/v1/shorten', { url })
       .then(response => {
-        console.log('Shortened URL:', response.data);
         setShortUrl(response.data.shortUrl);
       })
       .catch(error => {
         console.error('Error shortening URL:', error);
       });
   }
+
+  const fullShortUrl = `${getBaseUrl()}/${shortUrl}`;
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center bg-indigo-950 py-10">
@@ -43,15 +48,15 @@ export const Home = () => {
               <p className="text-sm text-gray-600 mb-2">Your shortened URL:</p>
               <div className="flex items-center gap-3">
                 <a 
-                  href={`http://localhost:3000/${shortUrl}`}
+                  href={fullShortUrl}
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-blue-600 font-semibold hover:underline break-all"
                 >
-                  http://localhost:3000/{shortUrl}
+                  {fullShortUrl}
                 </a>
                 <button 
-                  onClick={() => navigator.clipboard.writeText(`http://localhost:3000/${shortUrl}`)}
+                  onClick={() => navigator.clipboard.writeText(fullShortUrl)}
                   className="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded transition-colors"
                 >
                   Copy
