@@ -11,6 +11,11 @@ const userRoutes = require('./routes/userRoutes');
 
 app.use(express.json());
 
+// Health check / root route
+app.get('/', (req, res) => {
+  res.json({ message: 'URL Shortener API is running', api: '/api/v1' });
+});
+
 // API Routes
 app.use('/api/v1', urlRoutes);
 app.use('/api/v1', userRoutes);
